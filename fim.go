@@ -92,26 +92,26 @@ func main() {
 
 			// create goroutine func
 			// get hash of file, compare to map to see if changed
-			go func(filename string) {
+			go func(fname string) {
 				// wait until function finishes to tell wg that this goroutine is done
 				defer wg.Done()
 
 				//check if file is a directory, contiue if not
-				if info, _ := os.Stat(filename); info.IsDir() == false {
-					hash := getHash(filename)
+				if info, _ := os.Stat(fname); info.IsDir() == false {
+					hash := getHash(fname)
 
-					// h is value of filename in the lookup map
-					// ok is bool result of if the filename exists in map
-					// so, if filename exists and hash doesn't match with hash
+					// h is value of fname in the lookup map
+					// ok is bool result of if the fname exists in map
+					// so, if fname exists and hash doesn't match with hash
 					// 		in lookup, then we know it changed
-					if h, ok := lookup[filename]; ok && h != hash {
+					if h, ok := lookup[fname]; ok && h != hash {
 						fmt.Printf("%s\t%s has been changed!\n", time.Now().Format("01-02-2006 15:04:05"), filename)
-					} else if _, ok := lookup[filename]; !ok {
+					} else if _, ok := lookup[fname]; !ok {
 						fmt.Printf("%s\t%s has been added!\n", time.Now().Format("01-02-2006 15:04:05"), filename)
 					}
 
-					// update lookup map with filename:hash
-					lookup[filename] = hash
+					// update lookup map with fname:hash
+					lookup[fname] = hash
 				}
 			}(filename) // this calls the goroutine with this parameter
 		}
