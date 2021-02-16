@@ -1,5 +1,3 @@
-// TODO: implement file deletion check
-
 package main
 
 import (
