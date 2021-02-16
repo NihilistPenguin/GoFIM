@@ -13,8 +13,14 @@ import (
 	"time"
 )
 
-// reading file by chunks of 2048 bytes
-const chunksize = 2048
+// how many bytes per chunk to read file
+const CHUNKSIZE = 2048
+
+// which directory to monitor
+const DIRECTORY = "."
+
+// how many seconds to sleep before every monitor round
+const SLEEPTIME = 1
 
 // function to get the hash of a given file
 func getHash(file string) string {
@@ -32,16 +38,16 @@ func getHash(file string) string {
 	info, err := f.Stat()
 	filesize := info.Size()
 
-	// find the number of blocks we need, devide filesize by chunksize
-	numBlocks := uint64(math.Ceil(float64(filesize) / float64(chunksize)))
+	// find the number of blocks we need, devide filesize by CHUNKSIZE
+	numBlocks := uint64(math.Ceil(float64(filesize) / float64(CHUNKSIZE)))
 
 	// instantiate md5 hash
 	hash := md5.New()
 
 	// for the number of blocks calculated
 	for i := uint64(0); i < numBlocks; i++ {
-		// choose lowest of chunksize or remaining filesize
-		blocksize := uint64(math.Min(float64(chunksize), float64(filesize-int64(i*chunksize))))
+		// choose lowest of CHUNKSIZE or remaining filesize
+		blocksize := uint64(math.Min(float64(CHUNKSIZE), float64(filesize-int64(i*CHUNKSIZE))))
 
 		// buf creates a byte slice of size blocksize
 		buf := make([]byte, blocksize)
@@ -57,12 +63,6 @@ func getHash(file string) string {
 
 }
 
-// func checkFileDeletion(lookup map[string]string, fileInfo ) {
-// 	for _, file := range fileInfo {
-// 		fmt.Println(file)
-// 	}
-// }
-
 func main() {
 	// create map (like python dictionary) for our files:hashes
 	lookup := make(map[string]string)
@@ -71,7 +71,7 @@ func main() {
 	for {
 		// get everything in directory
 		// if error, log fatal
-		fileInfo, err := ioutil.ReadDir(".")
+		fileInfo, err := ioutil.ReadDir(DIRECTORY)
 
 		if err != nil {
 			log.Fatal(err)
@@ -117,6 +117,6 @@ func main() {
 		// wait until all specified # of goroutines finish
 		wg.Wait()
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(SLEEPTIME * time.Second)
 	}
 }
