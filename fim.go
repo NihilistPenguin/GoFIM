@@ -60,7 +60,6 @@ func getHash(file string) string {
 
 	// hash the data and return the hex encoded version
 	return hex.EncodeToString(hash.Sum(nil))
-
 }
 
 func main() {
