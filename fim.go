@@ -54,6 +54,7 @@ func getHash(file string) string {
 
 		// read blocksize amount of bytes into buf
 		f.Read(buf)
+		
 		// add bytes to our hash data
 		io.WriteString(hash, string(buf))
 	}
