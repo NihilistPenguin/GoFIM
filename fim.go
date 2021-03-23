@@ -38,7 +38,7 @@ func getHash(file string) string {
 	info, err := f.Stat()
 	filesize := info.Size()
 
-	// find the number of blocks we need, devide filesize by CHUNKSIZE
+	// find the number of blocks we need, divide filesize by CHUNKSIZE
 	numBlocks := uint64(math.Ceil(float64(filesize) / float64(CHUNKSIZE)))
 
 	// instantiate md5 hash
